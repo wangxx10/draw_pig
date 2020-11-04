@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>html5 canvas</title>
+	<script src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js'></script>
+	<style>
+		#pad {
+			background:#def;
+			border
+			 :1px solid #aaa;
+		}
+	</style>
+</head>
+<body>
+	<h2 id='test'>画布</h2>
+<pre>
+<table id='table1' width="20%" frame = "border" cellpadding="1">
+<tr>颜色选择<td bgcolor="#000000" onclick='clickColor("#000000",0)'>&nbsp;</td>
+<td bgcolor="#00FF00" onclick='clickColor("#00FF00",0)'>&nbsp;</td>
+<td bgcolor="#0000FF" onclick='clickColor("#0000FF",0)'>&nbsp;</td>
+<td bgcolor="#FFFF00" onclick='clickColor("#FFFF00",0)'>&nbsp;</td>
+<td bgcolor="#FF0000" onclick='clickColor("#FF0000",0)'>&nbsp;</td>
+
+<td bgcolor="#FFE4E1" onclick='clickColor("#FFE4E1",0)'>&nbsp;</td>
+<td bgcolor="#DDA0DD" onclick='clickColor("#DDA0DD",0)'>&nbsp;</td>
+
+</tr>
+</table>
+html5颜色<input type="color" id="picker" onchange="clickColor(0,5)" value="#FF00FF" style="width:10%;">
+线粗细   <input type="number" id="width" width="8" onchange='clickWidth()' value="6"  min="1" max="100">
+</pre>
+	
+	<canvas id='pad' width='900' height='600'></canvas>
+
+	<script>
+		canvas = $('#pad')[0]
+		context = canvas.getContext("2d")
+		color="#000000"
+		width=1
+		pendown = false
+
+		function clickColor(hex,html5)
+		{
+			if (html5 && html5 == 5){
+				b = document.getElementById("picker").value
+				color = b
+			}
+			else {color = hex}
+			context.beginPath()
+		}
+
+
+		function clickWidth()
+		{
+			b = document.getElementById("width").value
+			width = b
+			context.beginPath()
+		}
+
+
+
+		$('#pad').mousemove(
+			function(event)
+			{
+				var xpos = event.pageX - canvas.offsetLeft
+				var ypos = event.pageY - canvas.offsetTop
+
+				if (pendown) context.lineTo(xpos, ypos)
+				else         context.moveTo(xpos, ypos)
+				context.strokeStyle=color
+				context.lineWidth=width
+				context.stroke()
+			}
+		)
+
+		$('#pad').mousedown(function() { pendown = true } )
+		$('#pad').mouseup(function() { pendown = false } )
+		//$('#pad').mouseenter(function() {pendown = true} )
+		$('#pad').mouseleave(function() {pendown = false})
+
+		//$('#pad').mouseenter(function() { $('#test').html('oh,draw carefully') } )
+		//$('#pad').mouseleave(function() { $("#test").html('where are you going ?')} )
+	</script>
+</body>
+</html>
